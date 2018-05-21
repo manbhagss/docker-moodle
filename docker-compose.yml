@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_moodle
+      - MARIADB_DATABASE=bitnami_moodle
+    volumes:
+      - 'moodle_db:/bitnami'
+  moodle:
+    image: 'bitnami/moodle:latest'
+    environment:
+      - MOODLE_DATABASE_USER=bn_moodle
+      - MOODLE_DATABASE_NAME=bitnami_moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - 'moodle_web:/bitnami'
+    depends_on:
+      - mariadb
+
+volumes:
+  moodle_web:
+    driver: "local"
+  moodle_db:
+    driver: "local"
+  
